@@ -7,7 +7,7 @@ El uso inadecuado y excesivo de estos fármacos ha contribuido significativament
 
 ![2022-cde-infog-print-cycle-amr-sp_0-2-1536x1086](https://github.com/user-attachments/assets/611dd4c6-f827-4581-b671-8a6554e89abf)
 
-Los organismos marinos pueden contaminarse con estas bacterias; un ejemplo claro son los moluscos bivalvos. Estos al ser organismos filtradores, tienen la capacidad de acumular microorganismos presentes en su entorno acuático, incluyendo bacterias resistentes como *Escherichia coli*.
+Los organismos marinos pueden contaminarse con estas bacterias, siendo un ejemplo claro los moluscos bivalvos. Estos al ser organismos filtradores, obtienen sus nutrientes del entorno acuático mediante un proceso conocido como filtración, lo que también favorece la acumulación de contaminantes presentes en el medio, incluyendo bacterias resistentes como *Escherichia coli*.
 
 ![atmung-en](https://github.com/user-attachments/assets/b148e7b8-e888-40cd-aed2-7763bebb4585)
 
