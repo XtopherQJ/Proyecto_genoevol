@@ -1,69 +1,69 @@
 #!/bin/bash
 
-#Pipeline para identificación de genes de resistencia
+# === Pipeline for identification of resistance genes ===
 
-# === Paso 1: Descomprimir archivos .gz ===
-#El primer argumento debe ser el directorio que contiene los archivos .gz
+# === Step 0: Setup ===
+RAW_DIR="fastq_files"
+NANOPLOT_DIR="nanoplot_output"
+ATNANOPLOT_DIR="at_nanoplot_output"
+PORECHOP_DIR="porechop_output"
+TRIMMED_DIR="trimmed_reads"
+ASSEMBLY_DIR="flye_output"
+DRAFT_DIR="draft_assemblies"
+MEDAKA_DIR="medaka_output"
+ANNOT_DIR="annotation_output"
+THREADS=32
 
-DIRECTORIO="$1"
+mkdir -p "$NANOPLOT_DIR" "$ATNANOPLOT_DIR" "$PORECHOP_DIR" "$TRIMMED_DIR" "$ASSEMBLY_DIR" "$DRAFT_DIR" "$MEDAKA_DIR" "$ANNOT_DIR"
 
-#Descomprimir archivos .gz en el directorio especificado
-for archivo in  "$DIRECTORIO"/*.gz; do
-  if [ -f "$archivo" ]; then
-    echo "Descomprimiendo: $archivo"
-    gunzip "$archivo"
-  fi
+# === Step 1: Quality Control with NanoPlot ===
+echo "🚀 Running RAM pipeline..."
+echo "🔍 Starting Quality Analysis..."
+for file in "$RAW_DIR"/*.fastq.gz; do
+    NanoPlot --fastq "${file}" --outdir "${NANOPLOT_DIR}/$(basename "$file" .fastq.gz)" --threads "$THREADS"
+done 
+echo "Quality Control completed."
+
+# === Step 2: Adapters Removal with Porechop ===
+echo "✂️ Removing adapters..."
+for file in "$RAW_DIR"/*.fastq.gz; do
+    sample="$(basename "$file" .fastq.gz)"
+    porechop -i "${file}" -o "${PORECHOP_DIR}/${sample}.fastq.gz" --threads "$THREADS"
 done
+echo "Adapter removal completed."
 
-# Mensaje de finalización
-echo "Todos los archivos .gz han sido descomprimidos."
-
-# === Paso 2: Concatenar archivos fastq ===
-NOMBRE_DIRECTORIO=$(basename "$DIRECTORIO")
-NOMBRE_SALIDA="${NOMBRE_DIRECTORIO}_all.fastq"
-
-#Concatenar todos los archivos .fastq en uno solo
-cat "$DIRECTORIO"/*.fastq  > "$DIRECTORIO/$NOMBRE_SALIDA"
-
-#Mensaje de finalización
-echo "Todos los archivos .fastq han sido concatenados en $NOMBRE_SALIDA"
-
-#Eliminar todos los archivos que empiecen con fastq y quedarme solo con el concatenado
-rm -f "$DIRECTORIO"/fastq*
-
-#Mensaje de eliminación
-echo "Todos los archivos .fastq individuales han sido eliminados"
-
-# === Paso 3: Eliminar adaptadores con Porechop ===
-
-for archivo in  "$DIRECTORIO"/$NOMBRE_SALIDA; do
-    porechop -i "$archivo" -o "$DIRECTORIO/${NOMBRE_SALIDA/_all.fastq/_sinadap.fastq}"
+# === Step 3: Trimming with Filtlong ===
+echo "🗑️ Trimming reads..."
+for file in "$PORECHOP_DIR"/*.fastq.gz; do
+    sample="$(basename "$file" .fastq.gz)"
+    filtlong --min_length 1000 --keep_percent 90 --mean_q_weight 9 "${file}" | gzip > "${TRIMMED_DIR}/${sample}_trimmed.fastq.gz"
 done
-echo "Los adaptadores han sido eliminados."
+echo "Trimming completed."
 
-# === Paso 4: Ejecutar NanoPlot ===
-echo "Ejecutando NanoPlot..."
-for archivo in "$DIRECTORIO"/*_sinadap.fastq; do
-    NanoPlot --fastq "$archivo" --outdir "$DIRECTORIO/nanoplot_output"
+# === Step 4: New Quality Control ===
+echo "🔍 Starting Post-trimming Quality Analysis..."
+for file in "$TRIMMED_DIR"/*_trimmed.fastq.gz; do
+    NanoPlot --fastq "${file}" --outdir "${ATNANOPLOT_DIR}/$(basename "$file" _trimmed.fastq.gz)" --threads "$THREADS"
 done
-echo "NanoPlot finalizado."
+echo "Post-trimming Quality Analysis completed."
 
-# === Paso 5: Ensamblar con Flye ===
-echo "Ejecutando Flye..."
-for archivo in "$DIRECTORIO"/*_sinadap.fastq; do
-    flye --nano-hq "$archivo" --out-dir "$DIRECTORIO/emsamblado_output" \ 
-         --genome-size 5m --threads 16
+# === Step 5: Genome Assembly with Flye ===
+echo "🏗️ Assembling genomes..."
+for file in "$TRIMMED_DIR"/*_trimmed.fastq.gz; do
+    sample="$(basename "$file" _trimmed.fastq.gz)"
+    flye --nano-raw "${file}" -i 2 --out-dir "${ASSEMBLY_DIR}/${sample}_flye" --threads "$THREADS"
+    cp "${ASSEMBLY_DIR}/${sample}_flye/assembly.fasta" "${DRAFT_DIR}/${sample}.fasta"
 done
-echo "Ensamblaje finalizado."
+echo "Assembly completed."
 
-# === Paso 6: Polishing o correción del ensamblaje con Medaka ===
-echo "Ejecutando Medaka..."
-for archivo in "$DIRECTORIO/emsamblado_output/assembly.fasta"; do
-    medaka_consensus -i "$archivo" -d "$DIRECTORIO/emsamblado_output/assembly.fasta" \
-                     -o "$DIRECTORIO/medaka_output" -t 16 \ 
-                     -m r1041_e82_400bps_sup_variant_g615
+# === Step 6: Polishing with Medaka ===
+echo "🖌️ Polishing assemblies with Medaka..."
+for draft in "$DRAFT_DIR"/*.fasta; do
+    sample="$(basename "$draft" .fasta)"
+    R="${TRIMMED_DIR}/${sample}_trimmed.fastq.gz"
+    medaka_consensus -i "${R}" -d "${draft}" -o "${MEDAKA_DIR}/${sample}_medaka" -t "$THREADS"
 done
-echo "Correción del ensamblaje finalizada."
+echo "Polishing with Medaka completed."
 
 # === Paso7: Evaluar el ensamblaje con Quast ===
 echo "Ejecutando Quast..."
