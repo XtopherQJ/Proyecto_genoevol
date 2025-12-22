@@ -65,25 +65,12 @@ for draft in "$DRAFT_DIR"/*.fasta; do
 done
 echo "Polishing with Medaka completed."
 
-# === Paso7: Evaluar el ensamblaje con Quast ===
-echo "Ejecutando Quast..."
-for archivo in "$DIRECTORIO/medaka_output/consensus.fasta"; do
-    quast "$archivo" -o "$DIRECTORIO/quast_output"
+# === Step 7: Quality Assessment with Quast ===
+echo "📏 Assessing assembly quality with Quast..."
+for draft in "$DRAFT_DIR"/*.fasta; do
+    genome="$(basename "$draft" .fasta)"
+    quast.py "$draft" "$MEDAKA_DIR"/"${genome}_medaka/consensus.fasta" \ 
+    -o "${QUAST_DIR}/${genome}_quast" -t "$THREADS" -r "$REFERENCE" || true
 done
-echo "Evaluación del ensamblaje finalizada."
+echo "Quality assessment completed."
 
-# === Paso8: Anotación del genoma con Prokka ===
-echo "Ejecutando Prokka..."
-for archivo in "$DIRECTORIO/medaka_output/consensus.fasta"; do
-    prokka "$archivo" --outdir "$DIRECTORIO/anotacion_output" \ 
-                      --prefix "genome$NOMBRE_DIRECTORIO" --cpu 16
-done
-echo "Anotación del genoma finalizada."
-
-# === Paso9: Identificación de genes de resistencia con amrfinderplus ===
-echo "Ejecutando amrfinderplus..."
-for archivo in "$DIRECTORIO/anotacion_output/genome$NOMBRE_DIRECTORIO.fna"; do
-    amrfinder -n "$archivo" -o "$DIRECTORIO/amrfinder_output.tsv" \ 
-              --organism "Escherichia" -- threads 16
-done
-echo "Identificación de genes de resistencia finalizada."
