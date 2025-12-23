@@ -17,7 +17,13 @@ for fasta in "$INPUT_DIR"/*.fasta; do
     sample="$(basename "$fasta" .fasta)"
     echo "🔍 Analyzing resistance and virulence genes in: $sample"
     amrfinder -n "$fasta" --organism Escherichia --plus -o "${OUTPUT_DIR}/${sample}_amrfinder.tsv"
-    echo "✅ Output saved to: ${OUTPUT_DIR}/${sample}_amrfinder.tsv"
 done
-
 echo "🎯 AMRFinder analysis completed for all samples."
+
+# === Step 2: Multilocus Sequence Typing (MLST) ===
+echo "🔧 Step 2: Performing MLST analysis"
+for fasta in "$INPUT_DIR"/*.fasta; do
+    sample="$(basename "$fasta" .fasta)"
+    mlst "${fasta}" > "${OUTPUT_DIR}/${sample}_mlst.tsv"
+done
+echo "🎯 MLST analysis completed for all samples."
