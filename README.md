@@ -19,12 +19,13 @@ Las cepas de *Escherichia coli* aisladas de especies de moluscos bivalvos contie
 
 ## **Objetivos**
 
-- Desarrollar un `workflow` bioinformático para procesar datos crudos de secuenciamiento por medio de la tecnología **Oxford Nanopore Technologies (ONT)**, que permita realizar la evaluación de la calidad de las lecturas hasta la identificación de genes de resistencia y virulencia.
-- Desarrollar un `workflow` para el análisis filogenético de los genomas pertenecientes a las cepas de *Escherichia coli.*
+* Desarrollar un `pipeline` para procesar datos crudos de **Oxford Nanopore Technologies (ONT)** para la evaluación de calidad, ensamblado y anotación.
+* Desarrollar un `pipeline` para el análisis del **resistoma** y **viruloma**.
+* Desarrollar un `pipeline` para el análisis **filogenético**.
 
 ## **Metodología**
 
-Para desarrollar este proyecto se utilizará data cruda obtenida mediante el secuenciamiento del genoma completo de cepas de *Escherichia coli* aisladas a partir de diferentes especies de moluscos bivalvos. 
+Se utilizará data cruda obtenida del secuenciamiento del genoma completo de cepas de *Escherichia coli* aisladas a partir de diferentes especies de moluscos bivalvos. 
 El desarrollo del `workflow` se realizará utilizando lenguaje `bash`.
 
 ### **`Workflow` para el procesamiento de datos:**
@@ -39,7 +40,7 @@ El desarrollo del `workflow` se realizará utilizando lenguaje `bash`.
  
 * Polishing del ensamblado con `Medaka`.
 
-* Evaluación de la calidad del ensamblado con `QUAST`.**
+* Evaluación de la calidad del ensamblado con `QUAST`.
 
 * Anotación del genoma utilizando `Bakta`.
 
