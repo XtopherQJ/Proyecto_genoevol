@@ -1,4 +1,4 @@
-# **Identificación de genes de resistencia y virulencia en cepas de *Escherichia coli* aisladas de moluscos bivalvos.**
+# **Identificación de genes de resistencia y virulencia en cepas de *Escherichia coli*** aisladas de moluscos bivalvos.
 
 ## **Introducción**
 
@@ -27,34 +27,40 @@ Las cepas de *Escherichia coli* aisladas de especies de moluscos bivalvos contie
 Para desarrollar este proyecto se utilizará data cruda obtenida mediante el secuenciamiento del genoma completo de cepas de *Escherichia coli* aisladas a partir de diferentes especies de moluscos bivalvos. 
 El desarrollo del `workflow` se realizará utilizando lenguaje `bash`.
 
-### ***`Workflow` para el procesamiento de datos:***
+### **`Workflow` para el procesamiento de datos:**
 
-**1. Evaluación de la calidad utilizando `Nanoplot`.**  
+* Evaluación de la calidad utilizando `Nanoplot`. 
 
-**2. Eliminación de adaptadores con la herramienta `Porechop`.**
+* Eliminación de adaptadores con la herramienta `Porechop`.
 
-**3. Ensamblaje del genoma utilizando `Flye`.**
+* Filtrado de reads usando `Filtlong`.
 
-**4. Evaluación de la calidad del ensamblado con `QUAST`.**
+* Ensamblaje del genoma utilizando `Flye`.
+ 
+* Polishing del ensamblado con `Medaka`.
 
-**5. Polishing del ensamblado con `Medaka`.**
+* Evaluación de la calidad del ensamblado con `QUAST`.**
 
-**6. Anotación del genoma utilizando `Prokka`.**
+* Anotación del genoma utilizando `Bakta`.
 
-**7. Búsqueda de genes de resistencia con la herramienta `AMRFinderPlus`.**
+### **`Workflow` para la identificación de genes de resistencia:**
 
-**8. Búsqueda de genes de virulencia con la herramienta `VirulenceFinder`.**
+* Identificación de genes de resistencia y virulencia con `AMRFinderPlus`.
+
+* Análisis de secuencia tipo con `mlst`.
+
+* Clasificación de filogrupo con `ClermonTyping`.
 
 
-### ***`Workflow` para el análisis filogenético:***
+### **`Workflow` para el análisis filogenético:**
 
-**1. Identificación de variantes utilizando `Snippy`.**
+* Identificación de SNPs y creación del core genome utilizando `Snippy`.
 
-**2. Creación del core genome utilizando `Snippy`.**
+* Eliminación de regiones recombinantes con `Gubbins`.
 
-**3. Eliminación de regiones recombinantes con `Gubbins`.**
+* Construcción del árbol filogenético con `IQ-TREE`.
 
-**4. Construcción del árbol filogenético con `IQ-TREE`.**
+* Visualización con `iTOL`. 
 
 
 
