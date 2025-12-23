@@ -1,33 +1,37 @@
 #!/bin/bash
 
-#  ----Utilizando Snippy para crear el core genome ----
-# Primero vamos a ubicar todos los genomas en un directorio llamado all_fastas
-# Recordar que la mejor opción es utilizar el archivo ensamblado luego del polishing. 
+# === Phylogenetic Analysis Pipeline ===
 
+echo "🚀 Starting Phylogenetic Analysis Pipeline"
 
-echo "🚀 Iniciando el análisis con Snippy..."
+# === Step 0: Setup ===
+INPUT_DIR="all_fastas"
+OUTPUT_DIR="phylo_results"
+REFERENCE="genomic.gbff"
+SNIPPY="snippy_results"
+THREADS=32
 
-mkdir -p snippy_results all_fastas
-cp ensamblados/*.fasta all_fastas/
+mkdir -p "$OUTPUT_DIR" "$SNIPPY"
 
-# Utilizamos un loop para correr Snippy en cada genoma
-
-for genome_fasta in all_fastas/*.fasta; do
-    nombre_base=$(basename "$genome_fasta" .fasta) 
-    snippy --ref genomic.gbff --ctgs "$genome_fasta" \
-    --outdir "snippy_results/$nombre_base" \
-    --force --cpus 8;
+# === Step 1: Finding SNPs with Snippy ===
+echo "🔍 Finding SNPs with Snippy..."
+for genome in "$INPUT_DIR"/*.fasta; do
+    sample="$(basename "$genome" .fasta)" 
+    snippy --ref "${REFERENCE}" --ctgs "${genome}" --outdir "${OUTPUT_DIR}/$sample" --force --cpus "${THREADS}"
 done
+echo "✅ SNP calling completed."
 
-# Ahora que tenemos los resultados de Snippy para cada genoma, vamos a crear el core genome
+# === Step 2: Core SNP Alignment with Snippy-core ===
+echo "🔨 Constructing the core genome with Snippy-core..."
+snippy-core --prefix core_snps --ref "${REFERENCE}" "${OUTPUT_DIR}"/*/
+mv core_snps* "${SNIPPY}/"
+echo "✅ Core genome alignment completed."
 
-echo "🔨 Construyendo el core genome con Snippy-core..."
-snippy-core --prefix core_analisis --ref genomic.gbff snippy_results/*/
-
-# Finalmente, utilizamos Gubbins para detectar regiones recombinantes en el core genome
-
-echo "🗑️ Eliminando las regiones recombinantes con Gubbins"
-run_gubbins.py --prefix gubbins_resultado core_analisis/core_analisis.full.aln
+# === Step 3: Removing Recombinant Regions with Gubbins ===
+echo "🧹 Removing recombinant regions with Gubbins..."
+run_gubbins.py --prefix gubbins_results --threads "${THREADS}" "${SNIPPY}/core_snps.full.aln"
+mv gubbins_results* "${SNIPPY}/"
+echo "✅ Recombinant regions removed."
 
 # Construiremos el árbol filogenético utilizando IQ-TREE
 
