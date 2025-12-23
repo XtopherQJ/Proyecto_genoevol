@@ -85,3 +85,5 @@ for draft in "$DRAFT_DIR"/*.fasta; do
     --verbose --threads "$THREADS" "${MEDAKA_DIR}/${genome}_medaka/consensus.fasta"
 done
 echo "Annotation completed."
+
+echo "🎉Nanopore pipeline finished successfully!🎉"
