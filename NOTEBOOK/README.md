@@ -1,4 +1,4 @@
-## RESULTADO DE CALIDAD - NANOPLOT
+## CALIDAD - NANOPLOT
 
 ![Nanoplotbf](Images/Nanoplotbf.png)
 
@@ -12,9 +12,15 @@
 ![Nanobf_ERR14317609](Images/NanobfERR14317609.png)
 
 
-## RESULTADO DE CALIDAD LUEGO DEL TRIMADO - NANOPLOT
+## CALIDAD LUEGO DEL TRIMADO - NANOPLOT
 
 ![Nanoplotat](Images/Nanoplotat.png)
+
+
+## CALIDAD DEL ENSAMBLADO - QUAST
+
+![Quast](Images/Quast.png)
+
 
 ## RESULTADO DE LA ANOTACION - BAKTA
 
