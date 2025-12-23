@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# === Pipeline for identification of resistance genes ===
+# === Nanopore pipeline for genome assembly and annotation ===
+
+echo "🚀 Starting Nanopore pipeline"
 
 # === Step 0: Setup ===
 RAW_DIR="fastq_files"
@@ -12,12 +14,12 @@ ASSEMBLY_DIR="flye_output"
 DRAFT_DIR="draft_assemblies"
 MEDAKA_DIR="medaka_output"
 ANNOT_DIR="annotation_output"
+REFERENCE="reference.fna"
 THREADS=32
 
 mkdir -p "$NANOPLOT_DIR" "$ATNANOPLOT_DIR" "$PORECHOP_DIR" "$TRIMMED_DIR" "$ASSEMBLY_DIR" "$DRAFT_DIR" "$MEDAKA_DIR" "$ANNOT_DIR"
 
 # === Step 1: Quality Control with NanoPlot ===
-echo "🚀 Running RAM pipeline..."
 echo "🔍 Starting Quality Analysis..."
 for file in "$RAW_DIR"/*.fastq.gz; do
     NanoPlot --fastq "${file}" --outdir "${NANOPLOT_DIR}/$(basename "$file" .fastq.gz)" --threads "$THREADS"
@@ -74,3 +76,12 @@ for draft in "$DRAFT_DIR"/*.fasta; do
 done
 echo "Quality assessment completed."
 
+# === Step 8: Annotation with Bakta ===
+echo "📝 Annotating assemblies with Bakta..."
+for draft in "$DRAFT_DIR"/*.fasta; do
+    genome="$(basename "$draft" .fasta)"
+    bakta --db <db-path> --output "${ANNOT_DIR}/${genome}_bakta" --prefix "$genome" \
+    --genus Escherichia --species coli --complete --keep-contig-headers \
+    --verbose --threads "$THREADS" "${MEDAKA_DIR}/${genome}_medaka/consensus.fasta"
+done
+echo "Annotation completed."
