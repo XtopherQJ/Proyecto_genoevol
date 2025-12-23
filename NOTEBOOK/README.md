@@ -1,8 +1,13 @@
-Este es el resultado que nos da Bakta
+## RESULTADO DE LA ANOTACION CON BAKTA
+
+### Visualización del genoma de la cepa ERR14314289
 
 ![Genome_ERR14314289](Images/ERR14314289.png)
 
-![Genome_ERR14314289](Images/ERR14317609.png)
+
+### Visualización del genoma de la cepa ERR14317609
+
+![Genome_ERR14317609](Images/ERR14317609.png)
 
 
 ![Tree](Images/Tree.png)
