@@ -22,7 +22,7 @@
 ![Quast](Images/Quast.png)
 
 
-## RESULTADO DE LA ANOTACION - BAKTA
+## ANOTACION DE LOS GENOMAS - BAKTA
 
 ### Visualización del genoma de la cepa ERR14314289
 
@@ -33,5 +33,7 @@
 
 ![Genome_ERR14317609](Images/ERR14317609.png)
 
+
+## ANALISIS FILOGENETICO - IQTREE
 
 ![Tree](Images/Tree.png)
