@@ -27,3 +27,19 @@ for fasta in "$INPUT_DIR"/*.fasta; do
     mlst "${fasta}" > "${OUTPUT_DIR}/${sample}_mlst.tsv"
 done
 echo "🎯 MLST analysis completed for all samples."
+
+# === Step 3: Phylogroup Determination ===
+echo "🔧 Step 3: Determining phylogroups using ClermonTyping"
+for fasta in "$INPUT_DIR"/*.fasta; do
+    sample="$(basename "$fasta" .fasta)"
+    "$PHYLOGROUP"/clermonTyping.sh --fasta "${fasta}" > "${OUTPUT_DIR}/${sample}_phylogroup.txt"
+done
+echo "🎯 ClermonTyping analysis completed for all samples."
+
+# === Step 4: Serotype Prediction ===
+echo "🔧 Predicting serotypes using SerotypeFinder"
+for fasta in "$INPUT_DIR"/*.fasta; do
+sample="$(basename "$fasta" .fasta)"
+ectyper -i "${fasta}" -c "$THREADS" --verify --pathotype -o "${OUTPUT_DIR}/${sample}_serotype"
+done
+echo "🎯 Serotype prediction completed for all samples."
