@@ -28,7 +28,7 @@ prefetch --option-file sra_list.txt
 ```
 Convertimos los **sra** a **fastq**
 ```bash
-mkdir fastq
+mkdir fastq_files
 for sra in $(cat sra_list.txt); do
     fasterq-dump $sra -O fastq/ --threads 8
 done
