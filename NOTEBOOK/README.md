@@ -14,7 +14,7 @@
 
 ## RESULTADO DE CALIDAD LUEGO DEL TRIMADO - NANOPLOT
 
-
+![Nanoplotat](Images/Nanoplotat.png)
 
 ## RESULTADO DE LA ANOTACION - BAKTA
 
