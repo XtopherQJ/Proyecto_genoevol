@@ -1,6 +1,6 @@
 ## RESULTADO DE CALIDAD - NANOPLOT
 
-
+![Nanoplotbf](Images/Nanoplotbf.png)
 
 
 ## RESULTADO DE LA ANOTACION - BAKTA
