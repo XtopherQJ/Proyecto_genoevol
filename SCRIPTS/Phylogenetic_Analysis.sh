@@ -33,9 +33,9 @@ run_gubbins.py --prefix gubbins_results --threads "${THREADS}" "${SNIPPY}/core_s
 mv gubbins_results* "${SNIPPY}/"
 echo "✅ Recombinant regions removed."
 
-# Construiremos el árbol filogenético utilizando IQ-TREE
+# === Step 4: Phylogenetic Tree Construction with iQ-TREE ===
+echo "🌳 Constructing phylogenetic tree with iQ-TREE..."
+iqtree -s "${SNIPPY}/gubbins_results.filtered_polymorphic_sites.fasta" -m TEST -B 1000 -nt AUTO
+echo "✅ Phylogenetic tree construction completed."
 
-echo "🌳 Construyendo el árbol filogenético con IQ-TREE..."
-iqtree -s gubbins_resultado.filtered_polymorphic_sites.fasta -m TEST -B 1000 -nt AUTO
-
-echo "✅ Análisis completado"
+echo "🎉 Phylogenetic Analysis Pipeline completed successfully!"
