@@ -3,13 +3,18 @@
 ![Nanoplotbf](Images/Nanoplotbf.png)
 
 
-### ERR14314289
+  ### ERR14314289
 
 ![Nanobf_ERR14314289](Images/NanobfERR14314289.png)
 
-### ERR14317609
+  ### ERR14317609
 
 ![Nanobf_ERR14317609](Images/NanobfERR14317609.png)
+
+
+## RESULTADO DE CALIDAD LUEGO DEL TRIMADO - NANOPLOT
+
+
 
 ## RESULTADO DE LA ANOTACION - BAKTA
 
