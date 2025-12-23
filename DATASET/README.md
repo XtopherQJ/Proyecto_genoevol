@@ -36,6 +36,13 @@ done
 gzip fastq/*.fastq
 ```
 
+El directorio `fastq_files` se usará para el procesamiento posterior de ensamblado-anotación. 
 
 El **reference.fna** utilizado para la anotación de los genomas pertenece a la cepa ***Escherichia coli* str. K-12 substr. MG1655** con código de accesión 
 **GCA_000005845.2**
+
+
+## E.COLI GENOMES
+El archivo **E.coli_genomes.xlxs** contiene la información de las cepas de *Escherichia coli* usadas para el análisis filogenético.
+
+
